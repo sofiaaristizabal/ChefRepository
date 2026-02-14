@@ -1,0 +1,7 @@
+package com.example.mimido.common.exception;
+
+public class NotFound extends RuntimeException {
+    public NotFound(String message) {
+        super(message);
+    }
+}
