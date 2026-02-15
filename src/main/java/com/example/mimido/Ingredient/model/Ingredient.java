@@ -4,6 +4,9 @@ import com.example.mimido.dish.model.Dish;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity()
 @Table(name="ingredients")
 @Data
@@ -20,8 +23,7 @@ public class Ingredient {
     private Category categoria;
 
     //CORRECT OR ASK OR WHATEVER
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="dish_id", nullable = false)
-    private Dish dish;
+    @ManyToMany(mappedBy = "ingredients") //mappedBy le dice que a relación esta siendo manejada por la otra entidad, o sea que dish es el dueño de esta relacion
+    private Set<Dish> dishes = new HashSet<>();
 
 }

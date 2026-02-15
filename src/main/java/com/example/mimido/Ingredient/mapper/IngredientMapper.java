@@ -1,5 +1,6 @@
 package com.example.mimido.Ingredient.mapper;
 
+import com.example.mimido.Ingredient.dto.IngredientCreateDto;
 import com.example.mimido.Ingredient.dto.IngredientResponseDto;
 import com.example.mimido.Ingredient.dto.IngredientUpdateDto;
 import com.example.mimido.Ingredient.model.Ingredient;
@@ -17,7 +18,7 @@ public class IngredientMapper {
         );
     }
 
-    public static Ingredient toEntity(IngredientResponseDto dto){
+    public static Ingredient toEntity(IngredientCreateDto dto){
         Ingredient ingredient = new Ingredient();
         ingredient.setName(dto.name());
         ingredient.setCategoria(dto.categoria());

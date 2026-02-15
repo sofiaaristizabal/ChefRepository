@@ -1,5 +1,6 @@
 package com.example.mimido.dish.controller;
 
+import com.example.mimido.Ingredient.dto.IngredientResponseDto;
 import com.example.mimido.dish.dto.DishCreateDTO;
 import com.example.mimido.dish.dto.DishResponseDTO;
 import com.example.mimido.dish.dto.DishUpdateDTO;
@@ -58,6 +59,17 @@ public class DishController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEntity(@PathVariable Long id){
         dishService.deleteById(id);
+    }
+
+    @PostMapping("/{dishId}/ingredients/{ingredientId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addIngredientToDish(@PathVariable Long dishId, @PathVariable Long ingredientId){
+        dishService.addIngredientToDishById(dishId, ingredientId);
+    }
+
+    @GetMapping("/{id}/ingredients")
+    public List<IngredientResponseDto> getIngredientsByDish(@PathVariable Long id){
+        return dishService.getIngredientsByDih(id);
     }
 
 }

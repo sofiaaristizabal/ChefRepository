@@ -1,5 +1,9 @@
 package com.example.mimido.dish.service;
 
+import com.example.mimido.Ingredient.dto.IngredientResponseDto;
+import com.example.mimido.Ingredient.mapper.IngredientMapper;
+import com.example.mimido.Ingredient.model.Ingredient;
+import com.example.mimido.Ingredient.service.IngredientService;
 import com.example.mimido.chef.dto.ChefResponseDTO;
 import com.example.mimido.chef.mapper.ChefMapper;
 import com.example.mimido.chef.model.Chef;
@@ -22,10 +26,12 @@ public class DishService {
 
     private final DishRepository dishRepository;
     private final ChefService chefService;
+    private final IngredientService ingredientService;
 
-    public DishService(DishRepository dishRepository, ChefService chefService){
+    public DishService(DishRepository dishRepository, ChefService chefService, IngredientService ingredientService){
         this.dishRepository = dishRepository;
         this.chefService = chefService;
+        this.ingredientService = ingredientService;
     }
 
     public DishResponseDTO create(DishCreateDTO dto){
@@ -79,5 +85,17 @@ public class DishService {
     public void deleteById(Long id){
         Dish dish = dishRepository.findById(id).orElseThrow(()->new NotFound(("dish not found ")));
         dishRepository.delete(dish);
+    }
+
+    public void addIngredientToDishById(Long dishId, Long ingredientId){
+        Dish dish = dishRepository.findById(dishId).orElseThrow(()->new NotFound(("dish not found ")));
+        Ingredient ingredient = ingredientService.getEntityById(ingredientId);
+        dish.addIngredient(ingredient);
+        dishRepository.save(dish);
+    }
+
+    public List<IngredientResponseDto> getIngredientsByDih(Long id){
+        Dish dish = dishRepository.findById(id).orElseThrow(()->new NotFound(("dish not found ")));
+        return dish.getIngredients().stream().map(IngredientMapper::toIngredientResponseDto).toList();
     }
 }
