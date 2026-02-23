@@ -31,4 +31,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/my-spring-app:${{ github.sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/my-spring-app2:${{ github.sha }}
