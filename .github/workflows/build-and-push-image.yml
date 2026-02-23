@@ -1,0 +1,34 @@
+name: Build and publish image
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+  workflow_dispatch: #me permite activar manualmente este workflow
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}  #built-in context variables, github injecta estos objetos automaticamente cuando el workflow corre
+          password: ${{ secrets.GITHUB_TOKEN }} #token generado de manera automatica por github para cada workflow, los permisos que pusimos arriba son los permisos que va a tener este token
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/my-spring-app:${{ github.sha }}

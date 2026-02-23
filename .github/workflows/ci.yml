@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main"]
+  pull_request:
+    branches: [ "main"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: testdb
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U test" --health-interval 10s --health-timeout 5s --health-retries 5
+
+      keycloak:
+        image: quay.io/keycloak/keycloak:21.1.1
+        env:
+          KEYCLOAK_ADMIN: admin
+          KEYCLOAK_ADMIN_PASSWORD: admin
+        ports:
+          - 8080:8080
+        options: >-
+          --health-cmd 'curl -f http://localhost:8080/ || exit 1' --health-interval 10s --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4 #clona el repositorio en el runner (la maquina que ejecuta el job en github actions, estamos usando un runner que provee github, pero tambien se puede hacer self-host de runners
+
+      - name: Set up JDK 25
+        uses: actions/setup-java@v4  #installa java en el runner, configura el JDK en la version correcta y el maven cache
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Wait for services
+        run: |
+          # wait until postgres and keycloak are healthy
+          docker ps
+          sleep 10
+
+      - name: Build & run tests
+        run: mvn -B -DskipTests=false clean verify #aqui generamos el .jar
