@@ -45,6 +45,12 @@ jobs:
           java-version: '25'
           cache: maven
 
+      - name: Wait 60s for Keycloak
+        run: sleep 60
+
+      - name: Show Keycloak logs
+        run: docker logs $(docker ps -a -q --filter "ancestor=ghcr.io/sofiaaristizabal/mykeycloak:latest")
+
       - name: Wait for services
         run: |
           # wait until postgres and keycloak are healthy
