@@ -51,11 +51,11 @@ jobs:
       - name: Wait for keycloak
         run: |
           echo "Waiting for Keycloak..."
-          until curl -sf http://localhost:8080/health/ready; do
+          until curl -sf http://localhost:8080/health/ready | grep -q UP; do
             echo "  not ready yet..."
             sleep 5
           done
-          echo "Keycloak is ready!
+          echo "Keycloak is ready!"
 
       - name: Build & run tests
         run: mvn -B -e clean verify -Dspring.profiles.active=test #aqui generamos el .jar
