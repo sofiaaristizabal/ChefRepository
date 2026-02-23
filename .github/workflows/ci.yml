@@ -32,7 +32,8 @@ jobs:
         options: >-
           --health-cmd "curl -f http://localhost:8080/ || exit 1"
           --health-interval 10s
-          --health-retries 10
+          --health-timeout 5s
+          --health-retries 25
 
     steps:
       - uses: actions/checkout@v4 #clona el repositorio en el runner (la maquina que ejecuta el job en github actions, estamos usando un runner que provee github, pero tambien se puede hacer self-host de runners
