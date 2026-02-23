@@ -43,9 +43,14 @@ jobs:
 
       - name: Wait for services
         run: |
-          # wait until postgres and keycloak are healthy
-          docker ps
-          sleep 10
+          for i in {1..30}; do
+            if docker exec $(docker ps -q -f name=postgres) pg_isready -U test; then
+              echo "Postgres is ready"
+              break
+            fi
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
 
       - name: Build & run tests
         run: mvn -B clean verify -Dspring.profiles.active=test #aqui generamos el .jar
