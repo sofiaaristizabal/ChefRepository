@@ -48,6 +48,14 @@ jobs:
             echo "Waiting for postgres..."
             sleep 2
           done
+      - name: Wait for keycloak
+        run: |
+          echo "Waiting for Keycloak..."
+          until curl -sf http://localhost:8080/health/ready; do
+            echo "  not ready yet..."
+            sleep 5
+          done
+          echo "Keycloak is ready!
 
       - name: Build & run tests
-        run: mvn -B clean verify -Dspring.profiles.active=test #aqui generamos el .jar
+        run: mvn -B -e clean verify -Dspring.profiles.active=test #aqui generamos el .jar
