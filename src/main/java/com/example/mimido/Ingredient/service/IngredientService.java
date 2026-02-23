@@ -38,6 +38,7 @@ public class IngredientService {
     public Ingredient getEntityById(Long id){
         return ingredientRepository.findById(id).orElseThrow(()-> new NotFound("Ingredient not found"));
     }
+    //something
 
     public List<IngredientResponseDto> findAll(){
         List<Ingredient> ingredients = ingredientRepository.findAll();
