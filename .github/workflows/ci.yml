@@ -43,12 +43,9 @@ jobs:
 
       - name: Wait for services
         run: |
-          for i in {1..30}; do
-            if docker exec $(docker ps -q -f name=postgres) pg_isready -U test; then
-              echo "Postgres is ready"
-              break
-            fi
-            echo "Waiting for Postgres..."
+          docker ps
+          until docker exec $(docker ps -qf "ancestor=postgres:15") pg_isready -U test; do
+            echo "Waiting for postgres..."
             sleep 2
           done
 
