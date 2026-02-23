@@ -53,4 +53,4 @@ jobs:
           sleep 10
 
       - name: Build & run tests
-        run: mvn -B -DskipTests=false clean verify #aqui generamos el .jar
+        run: mvn -B clean verify -Dspring.profiles.active=test #aqui generamos el .jar
