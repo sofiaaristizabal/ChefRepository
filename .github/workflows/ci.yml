@@ -59,3 +59,7 @@ jobs:
 
       - name: Build & run tests
         run: mvn -B -e clean verify -Dspring.profiles.active=test #aqui generamos el .jar
+
+      - name: Print surefire report on failure
+        if: failure()
+        run: cat target/surefire-reports/*.txt
