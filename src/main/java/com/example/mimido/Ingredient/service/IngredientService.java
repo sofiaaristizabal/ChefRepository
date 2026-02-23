@@ -18,11 +18,10 @@ import java.util.List;
 @Service
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
-    private final DishService dishService;
+
     //constructor
-    public IngredientService(IngredientRepository ingredientRepository, DishService dishService){
+    public IngredientService(IngredientRepository ingredientRepository){
         this.ingredientRepository = ingredientRepository;
-        this.dishService = dishService;
     }
 
     public IngredientResponseDto create(IngredientCreateDto dto){
