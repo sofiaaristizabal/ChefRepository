@@ -30,7 +30,11 @@ jobs:
         ports:
           - 8080:8080
         options: >-
-          --health-cmd 'curl -f http://localhost:8080/ || exit 1' --health-interval 10s --health-retries 10
+          --health-cmd "curl -f http://localhost:8080/ || exit 1"
+              --health-interval 10s
+              --health-retries 10
+              --entrypoint /opt/keycloak/bin/kc.sh
+              start-dev
 
     steps:
       - uses: actions/checkout@v4 #clona el repositorio en el runner (la maquina que ejecuta el job en github actions, estamos usando un runner que provee github, pero tambien se puede hacer self-host de runners
